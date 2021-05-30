@@ -1,24 +1,14 @@
-# README
+# Enigma
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+```
+$ cp config/database.yml{.sample,} 
+$ cp config/cable.yml{.sample,} 
+$ cp config/storage.yml{.sample,} 
+$ docker-compose build
+$ docker-compose run web rails webpacker:install
+$ docker-compose run web rails db:create RAILS_ENV=development
+$ docker-compose run web rails db:migrate RAILS_ENV=development
+$ docker-compose up -d
+$ docker-compose down
+```
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
