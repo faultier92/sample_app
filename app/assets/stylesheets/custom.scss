@@ -1,4 +1,7 @@
+$gray: #777;
+$gray-light: #555;
 $gray-medium-light: #eaeaea;
+$gray-darker: #222;
 
 /* universal */
 
@@ -74,7 +77,7 @@ footer {
   a {
     color: $gray;
     &:hover {
-      color: $geay-darker;
+      color: $gray-darker;
     }
   }
   small {
