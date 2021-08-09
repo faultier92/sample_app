@@ -9,11 +9,11 @@ RUN apt-get update -qq && \
     echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update && apt-get install yarn
 
-WORKDIR /enigma
-COPY Gemfile /enigma/Gemfile
-COPY Gemfile.lock /enigma/Gemfile.lock
+WORKDIR /sample_app
+COPY Gemfile /sample_app/Gemfile
+COPY Gemfile.lock /sample_app/Gemfile.lock
 RUN bundle install
-COPY . /enigma
+COPY . /sample_app
 
 # Add a script to be executed every time the container starts.
 COPY entrypoint.sh /usr/bin/
