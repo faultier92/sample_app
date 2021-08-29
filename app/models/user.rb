@@ -3,7 +3,7 @@ class User < ApplicationRecord
   MAX_LENGTH_OF_EMAIL = 255.freeze
   MAX_LENGTH_OF_PASSWORD = 8.freeze
 
-  before_save { self.email = email.downcase! }
+  before_save { self.email = email.downcase }
 
   validates :name,     presence: true,
                        length: { maximum: MAX_LENGTH_OF_NAME }
