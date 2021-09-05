@@ -1,73 +1,67 @@
 require 'rails_helper'
 
 RSpec.describe 'Session', type: :system do
-  let(:email)    { 'sample@example.com' }
-  let(:password) { 'sample_password' }
-  let!(:user)    { FactoryBot.create(:user, email: email, password: password) }
-  let(:current_user) { instance_variable_get(:@current_user) }
+  let!(:user) { FactoryBot.create(:user, email: 'test@example.com', password: 'test_password') }
+
+  shared_examples :logged_in do |email, remember_option|
+    it do
+      user = User.find_by(email: email)
+      expect(current_path).to eq "/users/#{user&.id}"
+      expect(user.remember_digest.present?).to eq remember_option
+      expect(page).not_to have_content 'Log in'
+      expect(page).to have_content 'Log out'
+    end
+  end
+
+  shared_examples :failed_to_log_in do
+    it do
+      expect(page).to have_content 'Invalid email/password combination'
+      expect(current_path).to eq '/login'
+      expect(page).to have_content 'Log in'
+      expect(page).not_to have_content 'Log out'
+    end
+  end
 
   describe '/login' do
-    before { visit '/login' }
-
-    context 'Succeed to login' do
-      shared_examples 'redirect to user detail page' do
-        it do
-          expect(current_path).to eq "/users/#{user.id}"
-          expect(page).not_to have_content 'Log in'
-          expect(page).to have_content 'Log out'
-        end
+    context 'succeed to login' do
+      context 'with remember' do
+        include_context :login_as_non_admin_user, 'test@example.com', 'test_password', true
+        it_behaves_like :logged_in, 'test@example.com', true
       end
 
-      context 'with correct email and password' do
-        before do
-          fill_in 'session_email', with: email
-          fill_in 'session_password', with: password
-          within('.login_form') { click_on 'Log in' }
-        end
-
-        it_behaves_like 'redirect to user detail page'
+      context 'without remember' do
+        include_context :login_as_non_admin_user, 'test@example.com', 'test_password', false
+        it_behaves_like :logged_in, 'test@example.com', false
       end
     end
 
     context 'Failed to login' do
-      shared_examples 'back to login page and display alert' do
-        it do
-          expect(page).to have_content 'Invalid email/password combination'
-          expect(current_path).to eq '/login'
-          expect(page).to have_content 'Log in'
-          expect(page).not_to have_content 'Log out'
-        end
-      end
-
       context 'with non existing user' do
         before do
-          fill_in 'session_email', with: 'not_exist@example.com'
-          fill_in 'session_password', with: password
+          visit '/login'
+          fill_in 'session_email', with: 'non_existing@example.com'
+          fill_in 'session_password', with: 'test_password' 
           within('.login_form') { click_on 'Log in' }
         end
 
-        it_behaves_like 'back to login page and display alert'
+        it_behaves_like :failed_to_log_in
       end
 
       context 'with incorrect password' do
         before do
-          fill_in 'session_email', with: email
-          fill_in 'session_password', with: 'incorrect' + password
+          visit '/login'
+          fill_in 'session_email', with: 'test@example.com'
+          fill_in 'session_password', with: 'incorrect_password'
           within('.login_form') { click_on 'Log in' }
         end
 
-        it_behaves_like 'back to login page and display alert'
+        it_behaves_like :failed_to_log_in
       end
     end
   end
 
   describe '/logout' do
-    before do
-      visit '/login'
-      fill_in 'session_email', with: email
-      fill_in 'session_password', with: password
-      within('.login_form') { click_on 'Log in' }
-    end
+    include_context :login_as_non_admin_user, 'test@example.com', 'test_password', false
 
     context 'when successfully logged out' do
       before { click_on 'Log out'  }
