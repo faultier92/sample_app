@@ -1,5 +1,6 @@
 $gray: #777;
 $gray-light: #555;
+$gray-lighter: #edecec;
 $gray-medium-light: #eaeaea;
 $gray-darker: #222;
 /* WIP: UNKNOWN VARIABLE */
@@ -187,3 +188,17 @@ input {
   margin-left: 0;
 }
 
+/* Users index */
+.users {
+  list-style: none;
+  margin: 0;
+  li {
+    overflow: auto;
+    padding: 10px 0;
+    border-bottom: 1px solid $gray-lighter;
+  }
+}
+
+.button_right {
+  float: right;
+}

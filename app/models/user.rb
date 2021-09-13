@@ -13,7 +13,8 @@ class User < ApplicationRecord
                        format: { with: URI::MailTo::EMAIL_REGEXP },
                        uniqueness: true
   validates :password, presence: true,
-                       length: { minimum: MAX_LENGTH_OF_PASSWORD }
+                       length: { minimum: MAX_LENGTH_OF_PASSWORD },
+                       allow_nil: true
 
   has_secure_password
 
