@@ -250,20 +250,52 @@ RSpec.describe 'Users', type: :system do
   end
 
   describe '/users' do
-    let!(:user) { FactoryBot.create(:user, email: 'first_user@example.com', password: 'password') }
     let!(:users) { FactoryBot.create_list(:user, 30) }
 
-    include_context :login_as_non_admin_user, 'first_user@example.com', 'password', false
+    context 'With non admin user' do
+      include_context :login_as_non_admin_user, 'non_admin_user@example.com', 'password', false
+ 
+      before { visit '/users' }
 
-    before { visit '/users' }
-
-    context 'Visit users index with more than 30 users' do
-      it 'dispays 30 users by pagination' do
-        expect(page).to have_css 'div.pagination'
-        User.first(30).each do |user|
-          expect(page).to have_content(user.name)
+      context 'Visit users index with more than 30 users' do
+        it 'has pagination link' do
+          expect(page).to have_css 'div.pagination'
         end
-        expect(page).not_to have_content(User.last.name)
+
+        it 'not display delete button' do
+          expect(page).not_to have_content 'delete'
+        end
+
+        it 'displays only 30 users' do
+          User.first(30).each do |user|
+            expect(page).to have_content(user.name)
+          end
+          expect(page).not_to have_content(User.last.name)
+        end
+      end
+    end
+
+    context 'With admin user' do
+      include_context :login_as_admin_user, 'admin_user@example.com', 'password', false
+
+      before { visit '/users' }
+
+      context 'display link and button' do
+        it 'has pagination link' do
+          expect(page).to have_css 'div.pagination'
+        end
+
+        it 'display delete button' do
+          expect(page).to have_content 'delete'
+        end
+      end
+
+      context 'click delete button' do
+        subject { click_on 'delete', match: :first } 
+
+        it 'delete a user' do
+          expect { subject }.to change { User.count }.by(-1)
+        end
       end
     end
   end
