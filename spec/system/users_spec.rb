@@ -248,5 +248,24 @@ RSpec.describe 'Users', type: :system do
       end
     end
   end
+
+  describe '/users' do
+    let!(:user) { FactoryBot.create(:user, email: 'first_user@example.com', password: 'password') }
+    let!(:users) { FactoryBot.create_list(:user, 30) }
+
+    include_context :login_as_non_admin_user, 'first_user@example.com', 'password', false
+
+    before { visit '/users' }
+
+    context 'Visit users index with more than 30 users' do
+      it 'dispays 30 users by pagination' do
+        expect(page).to have_css 'div.pagination'
+        User.first(30).each do |user|
+          expect(page).to have_content(user.name)
+        end
+        expect(page).not_to have_content(User.last.name)
+      end
+    end
+  end
 end
 

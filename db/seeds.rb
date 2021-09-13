@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # Create initial admin user
-User.create(name: 'admin',
+User.create!(name: 'admin',
             email: 'admin@example.com',
             admin: true,
             password: 'admin_password',

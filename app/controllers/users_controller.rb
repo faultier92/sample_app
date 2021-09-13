@@ -1,7 +1,11 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update]
-  before_action :logged_in_user, only: %i[edit update]
+  before_action :logged_in_user, only: %i[index edit update]
   before_action :correct_user, only: %i[edit update]
+
+  def index
+    @users = User.paginate(page: params[:page])
+  end
 
   def new
     @user = User.new
