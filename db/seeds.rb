@@ -11,4 +11,6 @@ User.create!(name: 'admin',
             email: 'admin@example.com',
             admin: true,
             password: 'admin_password',
-            password_confirmation: 'admin_password')
+            password_confirmation: 'admin_password',
+            activated: true,
+            activated_at: Time.zone.now)
