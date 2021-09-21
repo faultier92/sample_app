@@ -19,8 +19,8 @@ RSpec.describe 'Users', type: :system do
     context 'With appropriate values' do
       it 'succeed to create new account' do
         expect { subject }.to change { User.count }.by(1)
-        expect(current_path).to eq "/users/#{User.last.id}"
-        expect(page).to have_content 'Welcome to the Sample App!'
+        expect(current_path).to eq "/"
+        expect(page).to have_content 'Please check your email to activate your account.'
       end
     end
 
@@ -296,6 +296,19 @@ RSpec.describe 'Users', type: :system do
         it 'delete a user' do
           expect { subject }.to change { User.count }.by(-1)
         end
+      end
+    end
+  end
+
+  describe '/users/:id' do
+    context 'Visit edit page with activated false' do
+      let(:not_activated_user) { FactoryBot.create(:user, activated: false) }
+
+      before { visit "/users/#{not_activated_user.id}" }
+
+      it 'redirect to root page' do
+        expect(page).to have_content('The user is not activated.')
+        expect(current_path).to eq '/'
       end
     end
   end

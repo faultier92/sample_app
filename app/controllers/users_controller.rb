@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: %i[index edit update destroy]
   before_action :correct_user, only: %i[edit update]
   before_action :admin_user, only: :destroy
+  before_action :check_activation, only: :show
 
   def index
     @users = User.where(activated: true).paginate(page: params[:page])
@@ -13,7 +14,6 @@ class UsersController < ApplicationController
   end
 
   def show
-    redirect_to root_url and return unless @user.activated?
   end
 
   def create
@@ -80,6 +80,10 @@ class UsersController < ApplicationController
       redirect_to(root_url) unless current_user.admin?
     end
 
+    def check_activation
+      flash[:danger] = "The user is not activated."
+      redirect_to root_url and return unless @user.activated?
+    end
   # End of private
 end
 
