@@ -11,6 +11,9 @@ module Enigma
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
+    # Use spec/mailers/previews as mailer preview
+    config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
