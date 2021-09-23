@@ -81,9 +81,11 @@ class UsersController < ApplicationController
     end
 
     def check_activation
+      return if @user.activated?
       flash[:danger] = "The user is not activated."
-      redirect_to root_url and return unless @user.activated?
+      redirect_to root_url
     end
+
   # End of private
 end
 
