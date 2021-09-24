@@ -8,20 +8,20 @@ RSpec.describe 'PasswordResets', type: :system do
   before { allow(User).to receive(:new_token).and_return(token) }
 
   describe '/new' do
-    context '' do
+    context 'With valid email' do
       before do
         visit '/password_resets/new'
         fill_in 'password_reset_email', with: email
         click_on 'Submit'
       end
 
-      it '' do
+      it 'send email and redirect to root' do
         expect(current_path).to eq '/'
         expect(page).to have_content 'Email sent with password reset instructions'
       end
     end
 
-    context '' do
+    context 'With invalid email' do
       let(:dummy_email) { 'dummy@example.com' }
 
       before do
@@ -30,7 +30,7 @@ RSpec.describe 'PasswordResets', type: :system do
         click_on 'Submit'
       end
 
-      it '' do
+      it 'cannot send email' do
         expect(page).to have_content 'Email address not found'
         expect(current_path).to eq '/password_resets'
       end
@@ -71,7 +71,7 @@ RSpec.describe 'PasswordResets', type: :system do
         visit "/password_resets/#{token}/edit?email=#{CGI::escape(user.email)}"
       end
 
-      it '' do
+      it 'cannot display update form' do
         expect(page).to have_content 'Password reset has expired.'
         expect(current_path).to eq '/password_resets/new'
       end
@@ -86,7 +86,7 @@ RSpec.describe 'PasswordResets', type: :system do
         click_on 'Update password'
       end
 
-      it '' do
+      it 'cannot update password' do
         expect(current_path).to eq "/password_resets/#{token}"
         expect(page).to have_content "Password can't be blank"
       end
