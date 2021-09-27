@@ -2,6 +2,9 @@ class User < ApplicationRecord
   attr_accessor :remember_token, :activation_token, :reset_token
 
   has_many :microposts, dependent: :destroy
+  has_many :active_relationships, class_name: 'Relationship',
+                                  foreign_key: 'follower_id',
+                                  dependent: :destroy
 
   MAX_LENGTH_OF_NAME = 50.freeze
   MAX_LENGTH_OF_EMAIL = 255.freeze
