@@ -47,6 +47,16 @@ gem 'bcrypt'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 
+# Use active_storage
+gem 'active_storage_validations'
+
+# Use imagemagick
+gem 'image_processing'
+gem 'mini_magick'
+
+# Use S3 for image storage
+gem 'aws-sdk-s3'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
