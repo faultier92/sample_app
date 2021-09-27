@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   attr_accessor :remember_token, :activation_token, :reset_token
 
+  has_many :microposts, dependent: :destroy
+
   MAX_LENGTH_OF_NAME = 50.freeze
   MAX_LENGTH_OF_EMAIL = 255.freeze
   MAX_LENGTH_OF_PASSWORD = 8.freeze
@@ -64,6 +66,10 @@ class User < ApplicationRecord
 
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  def feed
+    Micropost.where("user_id = ?", id)
   end
 
   private
