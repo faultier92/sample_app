@@ -6,7 +6,7 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Enigma
+module SampleApp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
@@ -32,5 +32,8 @@ module Enigma
         helper_specs: false,
         routing_specs: false
     end
+
+    # Embed authenticate token into remote form
+    config.action_view.embed_authenticity_token_in_remote_forms = true
   end
 end
