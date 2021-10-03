@@ -10,6 +10,7 @@ $ docker-compose build
 $ docker-compose run web rails webpacker:install
 $ docker-compose run web yarn add jquery bootstrap @popperjs/core
 $ docker-compose run web rails db:create RAILS_ENV=development
+$ docker-compose run web rails active_storage:install
 $ docker-compose run web rails db:migrate RAILS_ENV=development
 ```
 
