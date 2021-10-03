@@ -44,7 +44,10 @@ RSpec.describe 'Micropost', type: :system do
         
           it 'failed to save micropost' do
             expect(current_path).to eq '/'
-            expect(page).to have_content content
+            # expect(page).to have_content content
+            max_length = 30
+            expected_content = content.length.to_i <= max_length ? content : "#{content[0...(max_length - 3)]}..."
+            expect(page).to have_content expected_content
             expect(page).to have_content 'Micropost created!'
           end
         end
