@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM ruby:3.0
+FROM ruby:3.1
 RUN apt-get update -qq && \
     apt-get install -y curl postgresql-client && \
     curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
